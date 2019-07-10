@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Event sample</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='main.css'>
+    <script src='touratte.js' defer></script>
+    <script src='renderer.js' defer></script>
+</head>
+<body>
+
+    <button id="test">Click me</button>
+
+    <script>
+
+        let btn = document.querySelector("button#test");
+        btn.addEventListener("click", 
+            event => {
+                console.log(`button: ${ event.target.id }`);
+                event.preventDefault();
+            },
+            {
+                once: true,
+                capture: false,
+                passive: false
+            }
+        );
+
+        document.addEventListener("click", 
+            event => 
+                console.log(`document: ${ event.target.id }`), 
+            {
+                once: true,
+                capture: false,
+                passive: false
+            }
+        );
+
+        let evt = new Event("click", {bubbles: true, cancelable: true});
+        let result = btn.dispatchEvent(evt);
+        console.log(`after dispatch: ${ result }`);
+        console.log(`event is default prevented: ${ evt.defaultPrevented }`);
+        console.log(`event is trusted: ${ evt.isTrusted }`);
+
+
+        // код для запоминания
+        //
+        evt = new Event(
+            "wake-up", 
+            {bubbles: true, cancelable: true});
+        btn.addEventListener(
+            "wake-up", 
+            event => { event.preventDefault(); }, 
+            {once: false, capture: false, passive: false});
+        result = btn.dispatchEvent(
+            evt);
+        
+        console.log(result);
+        
+        
+
+    </script>
+    
+</body>
+</html>
